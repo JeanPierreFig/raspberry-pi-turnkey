@@ -9,6 +9,7 @@ import os
 import subprocess
 import socket
 import webview
+import threading
 
 
 
@@ -85,10 +86,14 @@ def wificonnected():
         print("got connected to " + matches[0])
     return False
 
-if __name__ == "__main__":
-
+def createWebview():
     webview.create_window("","http://192.168.4.1/",fullscreen=False)
     print('showing webview')
+
+if __name__ == "__main__":
+
+    t = threading.Thread(target=createWebview)
+    t.start()
 
     # things to run the first time it boots
     if not os.path.isfile('pi.id'):
