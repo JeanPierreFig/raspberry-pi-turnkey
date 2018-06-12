@@ -4,7 +4,7 @@ import random
 import re
 import json
 import time
-import os.path 
+import os.path
 import os
 import subprocess
 import socket
@@ -51,6 +51,11 @@ update_config=1
 @app.route('/')
 def main():
     return render_template('index.html', ssids=getssid())
+
+
+@app.route('/getssid')
+def main():
+    return ssids=getssid()
 
 @app.route('/static/<path:path>')
 def send_static(path):
@@ -104,17 +109,17 @@ if __name__ == "__main__":
             s['status'] = 'disconnected'
 
     with open('status.json','w') as f:
-        f.write(json.dumps(s))   
+        f.write(json.dumps(s))
     if s['status'] == 'disconnected':
         s['status'] = 'hostapd'
         with open('status.json','w') as f:
-            f.write(json.dumps(s))   
+            f.write(json.dumps(s))
         with open('wpa.conf','w') as f:
             f.write(wpa_conf_default)
         subprocess.Popen("./enable_ap.sh")
     elif s['status'] == 'connected':
         piid = open('pi.id','r').read().strip()
-        
+
         # get ip address
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8",80))
