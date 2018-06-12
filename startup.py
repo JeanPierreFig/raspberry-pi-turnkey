@@ -86,6 +86,10 @@ def wificonnected():
     return False
 
 if __name__ == "__main__":
+
+    webview.create_window("","http://192.168.4.1/",fullscreen=False)
+    print('showing webview')
+
     # things to run the first time it boots
     if not os.path.isfile('pi.id'):
         with open('pi.id','w') as f:
@@ -122,8 +126,7 @@ if __name__ == "__main__":
         subprocess.Popen("./enable_ap.sh")
 
         #Create a full screen webview to display the units instructions
-        webview.create_window("","http://192.168.4.1/",fullscreen=False)
-        print('showing webview')
+
 
     elif s['status'] == 'connected':
         piid = open('pi.id','r').read().strip()
