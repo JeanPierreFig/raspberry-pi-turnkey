@@ -10,7 +10,7 @@ import subprocess
 import socket
 
 import requests
-from flask import Flask, request, send_from_directory,jsonify, render_template
+from flask import Flask, request, send_from_directory,jsonify, render_template, jsonify
 app = Flask(__name__, static_url_path='')
 
 def getssid():
@@ -54,8 +54,8 @@ def main():
 
 
 @app.route('/getssid')
-def main():
-    return ssids=getssid()
+def retrunssid():
+    return jsonify(ssids=getssid())
 
 @app.route('/static/<path:path>')
 def send_static(path):
