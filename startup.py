@@ -103,6 +103,8 @@ if __name__ == "__main__":
     else:
         s = json.load(open('status.json'))
 
+    webview.create_window("","http://192.168.4.1/",fullscreen=True)
+
     # check connection
     if wificonnected():
         s['status'] = 'connected'
@@ -122,6 +124,7 @@ if __name__ == "__main__":
 
         #Create a full screen webview to display the units instructions
         webview.create_window("","192.168.4.1/",fullscreen=False)
+        print('showing webview')
 
     elif s['status'] == 'connected':
         piid = open('pi.id','r').read().strip()
