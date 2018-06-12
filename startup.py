@@ -8,9 +8,12 @@ import os.path
 import os
 import subprocess
 import socket
+import webview
+
+
 
 import requests
-from flask import Flask, request, send_from_directory,jsonify, render_template, jsonify
+from flask import Flask, request, send_from_directory,jsonify, render_template
 app = Flask(__name__, static_url_path='')
 
 def getssid():
@@ -47,14 +50,13 @@ update_config=1
 """
 
 
-
 @app.route('/')
 def main():
     return render_template('index.html', ssids=getssid())
 
 
-@app.route('/getssid')
-def retrunssid():
+@app.route('/ssid')
+def ssid():
     return jsonify(ssids=getssid())
 
 @app.route('/static/<path:path>')
@@ -117,6 +119,10 @@ if __name__ == "__main__":
         with open('wpa.conf','w') as f:
             f.write(wpa_conf_default)
         subprocess.Popen("./enable_ap.sh")
+
+        #Create a full screen webview to display the units instructions
+        webview.create_window("","192.168.4.1/",fullscreen=False)
+
     elif s['status'] == 'connected':
         piid = open('pi.id','r').read().strip()
 
@@ -125,6 +131,8 @@ if __name__ == "__main__":
         s.connect(("8.8.8.8",80))
         ipaddress = s.getsockname()[0]
         s.close()
+
+        # TODO: write the connection code here.
 
         # alert user on snaptext
         r = requests.post("https://snaptext.live",data=json.dumps({"message":"Your Pi is online at {}".format(ipaddress),"to":piid,"from":"Raspberry Pi Turnkey"}))
